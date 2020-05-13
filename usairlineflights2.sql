@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 07, 2020 at 11:33 PM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.4
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 13, 2020 at 10:33 AM
+-- Server version: 8.0.18
+-- PHP Version: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `usairlineflights2`
 --
+CREATE DATABASE IF NOT EXISTS `usairlineflights2` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `usairlineflights2`;
 
 -- --------------------------------------------------------
 
@@ -28,9 +30,11 @@ SET time_zone = "+00:00";
 -- Table structure for table `carriers`
 --
 
-CREATE TABLE `carriers` (
+DROP TABLE IF EXISTS `carriers`;
+CREATE TABLE IF NOT EXISTS `carriers` (
   `CarrierCode` varchar(32) NOT NULL,
-  `Description` varchar(120) DEFAULT NULL
+  `Description` varchar(120) DEFAULT NULL,
+  PRIMARY KEY (`CarrierCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1536,8 +1540,9 @@ INSERT INTO `carriers` (`CarrierCode`, `Description`) VALUES
 -- Table structure for table `flights`
 --
 
-CREATE TABLE `flights` (
-  `flightID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `flights`;
+CREATE TABLE IF NOT EXISTS `flights` (
+  `flightID` int(11) NOT NULL AUTO_INCREMENT,
   `colYear` smallint(6) DEFAULT NULL,
   `colMonth` smallint(6) DEFAULT NULL,
   `DayOfMonths` smallint(6) DEFAULT NULL,
@@ -1561,8 +1566,12 @@ CREATE TABLE `flights` (
   `TaxiOut` smallint(6) DEFAULT NULL,
   `Cancelled` tinyint(1) DEFAULT NULL,
   `CancellationCode` varchar(32) DEFAULT NULL,
-  `Diverted` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `Diverted` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`flightID`),
+  KEY `Dest` (`Dest`),
+  KEY `Origin` (`Origin`),
+  KEY `UniqueCarrier` (`UniqueCarrier`)
+) ENGINE=InnoDB AUTO_INCREMENT=4759 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `flights`
@@ -6345,14 +6354,16 @@ INSERT INTO `flights` (`flightID`, `colYear`, `colMonth`, `DayOfMonths`, `DayOfW
 -- Table structure for table `usairports`
 --
 
-CREATE TABLE `usairports` (
+DROP TABLE IF EXISTS `usairports`;
+CREATE TABLE IF NOT EXISTS `usairports` (
   `IATA` varchar(32) NOT NULL,
   `Airport` varchar(80) DEFAULT NULL,
   `City` varchar(32) DEFAULT NULL,
   `State` varchar(32) DEFAULT NULL,
   `Country` varchar(32) DEFAULT NULL,
   `Latitude` float DEFAULT NULL,
-  `Longitude` float DEFAULT NULL
+  `Longitude` float DEFAULT NULL,
+  PRIMARY KEY (`IATA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -9740,41 +9751,6 @@ INSERT INTO `usairports` (`IATA`, `Airport`, `City`, `State`, `Country`, `Latitu
 ('ZPH', 'Zephyrhills Municipal', 'Zephyrhills', 'FL', 'USA', 28.2281, -82.1559),
 ('ZUN', 'Black Rock', 'Zuni', 'NM', 'USA', 35.0832, -108.792),
 ('ZZV', 'Zanesville Municipal', 'Zanesville', 'OH', 'USA', 39.9445, -81.8921);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `carriers`
---
-ALTER TABLE `carriers`
-  ADD PRIMARY KEY (`CarrierCode`);
-
---
--- Indexes for table `flights`
---
-ALTER TABLE `flights`
-  ADD PRIMARY KEY (`flightID`),
-  ADD KEY `Dest` (`Dest`),
-  ADD KEY `Origin` (`Origin`),
-  ADD KEY `UniqueCarrier` (`UniqueCarrier`);
-
---
--- Indexes for table `usairports`
---
-ALTER TABLE `usairports`
-  ADD PRIMARY KEY (`IATA`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `flights`
---
-ALTER TABLE `flights`
-  MODIFY `flightID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4759;
 
 --
 -- Constraints for dumped tables
