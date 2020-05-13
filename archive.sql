@@ -169,6 +169,25 @@ ORDER BY
     total_cancelled
 DESC
 
+-- corregido
+
+SELECT
+    flights.UniqueCarrier,
+    flights.colYear,
+    flights.colMonth,
+    SUM(flights.Cancelled) AS "total_cancelled"
+FROM
+    flights
+GROUP BY
+    flights.colYear,
+    flights.colMonth,
+    flights.UniqueCarrier
+HAVING
+     total_cancelled > 0
+ORDER BY
+    total_cancelled
+DESC
+
 -- the output order differs from the exercise text
 UniqueCarrier	colYear	colMonth	total_cancelled
 DL	1988	1	3
